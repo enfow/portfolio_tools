@@ -1,10 +1,10 @@
-"""Get stock information.
+"""Get korea stock information.
 
 Author: kyeongmin.woo
 Email: wgm0601@gmail.com
 
 Notes:
-    - this module request data from naver finance. If Naver's policy is
+    - this module request data to naver finance. If Naver's policy is
     changed, it may not work.
 """
 
