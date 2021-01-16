@@ -4,9 +4,9 @@ Author: kyeongmin.woo
 Email: wgm0601@gmail.com
 """
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
-from crawler.korea_stock import get_stock_info
+from crawler.global_stock import get_stock_info
 
 
 class Portfolio:
@@ -43,11 +43,10 @@ class Portfolio:
 
 if __name__ == "__main__":
     portfolio = Portfolio()
-    portfolio.add_stock(
-        name="삼성전자",
-        code="005930",
-        nation="korea",
-        purchase_price=42800,
-        num=10,
-    )
+    asset_list: List[Tuple[str, str, str, int, int]] = [
+        ("삼성전자", "005930.KS", "korea", 42800, 10),
+        ("AT&T", "T", "us", 29, 10)
+    ]
+    for asset in asset_list:
+        portfolio.add_stock(*asset)
     print(portfolio.stock)
