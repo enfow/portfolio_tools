@@ -17,7 +17,7 @@ class Portfolio:
         self.stock: List[Dict[str, Any]] = []
 
     def add_stock(
-        self, name: str, code: str, nation: str, purchase_price: int, num: int
+        self, name: str, code: str, nation: str, num: int
     ) -> None:
         """Add single stock.
 
@@ -25,7 +25,6 @@ class Portfolio:
             - name: stock name
             - code: stock code
             - nation: currency, (korea, usa)
-            - purchase_price: purchase price
             - num: number of stocks
         """
         cur_price = get_stock_info(code)
@@ -34,7 +33,6 @@ class Portfolio:
                 name=name,
                 code=code,
                 nation=nation,
-                purchase_price=purchase_price,
                 current_price=cur_price,
                 num=num,
             )
@@ -43,9 +41,9 @@ class Portfolio:
 
 if __name__ == "__main__":
     portfolio = Portfolio()
-    asset_list: List[Tuple[str, str, str, int, int]] = [
-        ("삼성전자", "005930.KS", "korea", 42800, 10),
-        ("AT&T", "T", "us", 29, 10)
+    asset_list: List[Tuple[str, str, str, int]] = [
+        ("삼성전자", "005930.KS", "korea", 10),
+        ("AT&T", "T", "us", 10)
     ]
     for asset in asset_list:
         portfolio.add_stock(*asset)
