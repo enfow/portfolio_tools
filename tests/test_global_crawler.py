@@ -26,14 +26,19 @@ class TestGlobalCrwaler:
             )
 
     def test_get_current_price(self):
-        """Get current price of the stock"""
+        """Check the module get the current price of the stock.
+
+        Notes:
+            - The current price of the stock is change almost everytime. So It
+            just check the data type.
+        """
         for html_txt in self.html_txts:
             cur_price = get_current_price(html_txt)
             assert isinstance(cur_price, float)
             assert cur_price > 0.0
 
     def test_get_market_and_currency(self):
-        """Get current price of the stock"""
+        """Check the module get the exact market name and currency."""
         for idx, html_txt in enumerate(self.html_txts):
             market, currency = get_market_and_currency(html_txt)
             assert market == VALID_MARKETS[idx]
