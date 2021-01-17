@@ -18,7 +18,7 @@ class TestGlobalCrwaler:
         """"""
         self.urls = list()
         self.html_txts = list()
-        for code in ["005930.KS", "T", "035760.KQ"]:
+        for code in VALID_TICKERS:
             url = f"https://finance.yahoo.com/quote/{code}?p={code}&.tsrc=fin-srch"
             self.urls.append(url)
             self.html_txts.append(
