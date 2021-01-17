@@ -29,7 +29,7 @@ class TestGlobalCrwaler:
         """Check the module get the current price of the stock.
 
         Notes:
-            - The current price of the stock is change almost everytime. So It
+            - The current price of the stock change almost everytime. So It
             just check the data type.
         """
         for html_txt in self.html_txts:
