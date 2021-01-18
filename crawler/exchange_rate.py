@@ -11,7 +11,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def get_exchange_rate(code: str) -> float:
+def exchange_from_usd_rate(code: str) -> float:
     """Get current exchange rate.
 
     Returns:
@@ -21,11 +21,11 @@ def get_exchange_rate(code: str) -> float:
     html_txt = BeautifulSoup(requests.get(url).content, "html.parser")
     shell = html_txt.find("div", {"id": "mrt-node-Lead-3-QuoteHeader"})
     shell = shell.find("span", {"data-reactid": "32"})
-    cur_exchange = float(shell.text.replace(",", ""))
+    rate = float(shell.text.replace(",", ""))
 
-    return cur_exchange
+    return rate
 
 
 if __name__ == "__main__":
-    cur_exchange = get_exchange_rate("KRW")
+    cur_exchange = exchange_from_usd_rate("KRW")
     print(cur_exchange)
