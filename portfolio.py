@@ -9,22 +9,42 @@ from typing import Any, Dict, List, Tuple
 from crawler.exchange_rate import exchange_from_usd_rate
 from crawler.global_stock import get_stock_info
 
+VALID_CURRENCY = {"KRW", "USD"}
 
 class Portfolio:
     """Portfolio."""
 
     def __init__(self) -> None:
         """Initialize."""
-        self.asset: List[Dict[str, Any]] = []
+
+        self.asset: Dict[str, Dict[str, Any]] = dict()
         self.asset_2_krw: Dict[str, float] = dict()
+        self.currency_2_krw: Dict[str, float] = dict()
+        self.total_krw: float = 0.
+        self.exchange_rate: Dict[str, float] = dict()
+        self.is_updated = False
+
+        self.reset()
+
+    def reset(self) -> None:
+        """Reset all values."""
+        self.asset = dict()
+        self.asset_2_krw = dict()
+        self.currency_2_krw = { currency : 0.0 for currency in VALID_CURRENCY}
+        self.total_krw = 0.
         self.exchange_rate: Dict[str, float] = dict(
             KRW=1.0,
             USD=exchange_from_usd_rate("KRW"),
         )
+        self.is_updated = False
 
     def update(self) -> None:
         """Update values for reporting."""
-        for asset in self.asset:
+        if self.is_updated:
+            print("It updates again without reset")
+        self.is_updated = True
+        self.total_krw = 0.
+        for name, asset in self.asset.items():
             if asset["type"] == "stock":
                 krw = self.exchange_to_krw(
                     currency=asset["currency"],
@@ -33,11 +53,15 @@ class Portfolio:
                 )
             elif asset["type"] == "cash":
                 krw = self.exchange_to_krw(
-                    currency=asset["currency"], price=1, num=asset["num"]
+                    currency=asset["currency"], 
+                    price=1, 
+                    num=asset["num"]
                 )
 
-            self.asset_2_krw[asset["name"]] = krw
-        print(self.asset_2_krw)
+            self.asset_2_krw[name] = round(krw, 2)
+            self.currency_2_krw[asset["currency"]] += round(krw, 2)
+            self.total_krw += krw
+        self.totla_krw = round(self.total_krw, 2)
 
     def exchange_to_krw(
         self,
@@ -56,14 +80,12 @@ class Portfolio:
 
     def add_cash(self, currency: str, num: float) -> None:
         """Add cash information to self.asset."""
-        self.asset.append(
-            dict(
+        name = "cash_{}".format(currency)
+        self.asset[name] = dict(
                 type="cash",
-                name="cash_{}".format(currency),
                 currency=currency,
                 num=num,
             )
-        )
 
     def add_stock(self, name: str, code: str, num: int) -> None:
         """Add stock information to self.asset.
@@ -76,14 +98,13 @@ class Portfolio:
         cur_price, market, currency = get_stock_info(code)
         stock_info = dict(
             type="stock",
-            name=name,
             code=code,
             currency=currency,
             market=market,
             cur_price=cur_price,
             num=num,
         )
-        self.asset.append(stock_info)
+        self.asset[name] = stock_info
 
 
 if __name__ == "__main__":
@@ -95,3 +116,5 @@ if __name__ == "__main__":
     for add in asset_list:
         portfolio.add_stock(*add)
     portfolio.update()
+    print(portfolio.asset_2_krw)
+    print(portfolio.total_krw)
