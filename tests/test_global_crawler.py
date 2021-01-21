@@ -1,4 +1,4 @@
-"""Test codes."""
+"""Test codes for stocks."""
 
 import requests
 from bs4 import BeautifulSoup
